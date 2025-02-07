@@ -37,6 +37,12 @@ em {
   font-family: 'Ronzino Oblique', sans-serif;
 }
 
+a:link
+{
+    color:#FFFFFF;
+}
+
+
 .ASCII {
   src: url('fonts/ARIALUNI') format('ttf');
 }

@@ -38,7 +38,7 @@ em {
 }
 
 .ASCII {
-  font: sans-serif;
+  src: url('fonts/ARIALUNI') format('ttf');
 }
 
 .prompt {
@@ -52,17 +52,16 @@ em {
 
 @font-face {
   font-family: 'PicNic';
-  src: url('fonts/PicNic-Regular.otf') format('opentype'),
-       url('fonts/Ronzino-Oblique.woff2') format('woff2');
+  src: url('fonts/PicNic-Regular.otf') format('opentype');
   font-weight: normal;
 }
 
 @font-face {
   font-family: 'Anthony';
-  src: url('Anthony.woff2') format('woff2'),
-       url('Anthony.woff') format('woff'),
-       url('Anthony.otf') format('opentype'),
-       url('Anthony.eot') format('embedded-opentype');
+  src: url('fonts/Anthony.woff2') format('woff2'),
+       url('fonts/Anthony.woff') format('woff'),
+       url('fonts/Anthony.otf') format('opentype'),
+       url('fonts/Anthony.eot') format('embedded-opentype');
   font-weight: normal;
   font-style: normal;
 }

@@ -1,7 +1,68 @@
 html, body {
   margin: 0;
   padding: 0;
+  
 }
+
 canvas {
-  display: block;
+  /* display: block; */
+  /* position: absolute; Positioning the canvas absolutely */
+  top: 0; /* Align top edge at the top of the viewport */
+  left: 0; /* Align left edge at the left of the viewport */
+  align-self: center;
+  z-index: 10; /* Ensure it's on top of other content */
+}
+
+main {
+  position: relative; /* Ensures proper stacking context */
+  z-index: 5; /* Lower z-index than the canvas */
+}
+
+body {
+  font-family: 'Anthony', sans-serif;
+  font-size: 20px; /* Make it easy to see */
+  color: white; /* Make it stand out */
+}
+
+h1 {
+  /* font-family: 'PicNic', sans-serif; */
+  margin-left: 30px;
+  margin-top: 10px;
+  font-family: 'Anthony', sans-serif;
+  text-decoration: underline;
+  font-size: 30px;
+}
+
+em {
+  font-family: 'Ronzino Oblique', sans-serif;
+}
+
+.ASCII {
+  font: sans-serif;
+}
+
+.prompt {
+  position: absolute;
+  text-align: center;
+  letter-spacing: 0.1rem;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+@font-face {
+  font-family: 'PicNic';
+  src: url('fonts/PicNic-Regular.otf') format('opentype'),
+       url('fonts/Ronzino-Oblique.woff2') format('woff2');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Anthony';
+  src: url('Anthony.woff2') format('woff2'),
+       url('Anthony.woff') format('woff'),
+       url('Anthony.otf') format('opentype'),
+       url('Anthony.eot') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
 }

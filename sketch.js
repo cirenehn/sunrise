@@ -1,113 +1,69 @@
-let currentPattern = 0;
-let switchInterval = 5000; // Time in milliseconds to switch patterns
-let lastSwitchTime = 0;
-let bgColor = 0; // Default background color (black)
-let clearZone;
-let xOffset = 0;
-let yOffset = 0;
+// Define array to hold snowflake objects
+let snowflakes = [];
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
-    lastSwitchTime = millis();
-    background(bgColor);
-    clearZone = {
-  x: -width / 4,  // Start point x (center adjusted)
-  y: height / 10,  // Start point y (lower region)
-  w: width / 2,   // Width of the clear zone
-  h: height / 4   // Height of the clear zone
-};
-}
+  createCanvas(windowWidth, windowHeight);
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight); // Resize canvas on window resize
-} 
+  angleMode(DEGREES);
+
+  // Create snowflake objects
+  for (let i = 0; i < 300; i++) {
+    // Add a new snowflake object to the array
+    snowflakes.push(new Snowflake());
+  }
+
+  // Create screen reader accessible description
+  describe('Snowflakes falling on a black background.');
+}
 
 function draw() {
-    translate(width / 2, height / 2);
-    background(0);
-    if (millis() - lastSwitchTime > switchInterval) {
-        currentPattern = (currentPattern + 1) % 3; // Cycle through 0, 1, 2
-        lastSwitchTime = millis(); // Reset the timer
+  clear();
+
+  // Update and display each snowflake in the array
+  let currentTime = frameCount / 60;
+
+  for (let flake of snowflakes) {
+    // Update each snowflake position and display
+    flake.update(currentTime);
+    flake.display();
+  }
+}
+
+// Define the snowflake class
+
+class Snowflake {
+  constructor() {
+    this.posX = 0;
+    this.posY = random(-height, 0);
+    this.initialAngle = random(0, 360);
+    this.size = random(2, 5);
+    this.radius = sqrt(random(pow(width / 2, 2)));
+    this.color = color(random(200, 256), random(200, 256), random(200, 256));
+  }
+
+  update(time) {
+    // Define angular speed (degrees / second)
+    let angularSpeed = 35;
+
+    // Calculate the current angle
+    let angle = this.initialAngle + angularSpeed * time;
+
+    // x position follows a sine wave
+    this.posX = width / 2 + this.radius * sin(angle);
+
+    // Different size snowflakes fall at different y speeds
+    let ySpeed = 8 / this.size;
+    this.posY += ySpeed;
+
+    // When snowflake reaches the bottom, move it to the top
+    if (this.posY > height) {
+      this.posY = -50;
     }
-
-    switch (currentPattern) {
-    case 0:
-      crossStitchX(); // White "X" shaped cross-stitch symbols
-      break;
-    case 1:
-      helixPattern(); // Pixels moving in a helix pattern
-      break;
-    case 2:
-      ribbonPattern(); // Pixels moving in a ribbon pattern
-      break;
   }
-}
 
-function crossStitchX() {
-  let spacing = 40; // Increased spacing for gaps
-  let size = 16; // Size of each "X"
-  let speed = 0.02; // Speed of rotation
-  let xOffset = cos(frameCount * 0.02) * 50; // Overall horizontal motion
-  let yOffset = sin(frameCount * 0.02) * 50; // Overall vertical motion
-
-  for (let x = -width / 2; x < width / 2; x += spacing) {
-    for (let y = -height / 2; y < height / 2; y += spacing) {
-      // Calculate adjusted positions with motion
-      let posX = x + xOffset;
-      let posY = y + yOffset;
-
-      // Check if the position is within the clear zone
-      if (posX > clearZone.x && posX < clearZone.x + clearZone.w &&
-          posY > clearZone.y && posY < clearZone.y + clearZone.h) {
-        continue; // Skip drawing in the clear zone
-      }
-
-      let angle = (sin(frameCount * speed + (x + y) * 0.05) + 1) * PI / 4; // Dynamic angle for rotation
-      drawX(posX, posY, size, angle);
-    }
-  }
-}
-
-
-function drawX(x, y, size, angle) {
-  push();
-  translate(x, y);
-  rotate(angle);
-  strokeWeight(5); // Thick enough to be noticeable as a border
-  stroke(0); // Black border
-  let halfSize = size / 2;
-  line(-halfSize, -halfSize, halfSize, halfSize); // First diagonal of the X
-  line(-halfSize, halfSize, halfSize, -halfSize); // Second diagonal of the X
-  strokeWeight(3); // Slightly thinner white stroke inside the black border
-  stroke(255); // White color
-  line(-halfSize, -halfSize, halfSize, halfSize); // Redraw the first diagonal
-  line(-halfSize, halfSize, halfSize, -halfSize); // Redraw the second diagonal
-  pop();
-}
-
-
-function helixPattern() {
-  let amplitude = 100;
-  let frequency = 0.05;
-  let numPoints = 100;
-  let size = 8; // Size of each square particle
-  for (let i = 0; i < numPoints; i++) {
-    let angle = map(i, 0, numPoints, 0, TWO_PI * 4); // Complete 4 full cycles
-    let x = amplitude * cos(angle);
-    let y = amplitude * sin(angle) * sin(frameCount * frequency + angle);
-    rect(x, y, size, size);
-  }
-}
-
-function ribbonPattern() {
-  let amplitude = 50;
-  let frequency = 0.1;
-  let numPoints = 100;
-  let size = 8; // Size of each square particle
-  for (let i = 0; i < numPoints; i++) {
-    let angle = map(i, 0, numPoints, 0, TWO_PI);
-    let x = amplitude * cos(angle) + 100 * sin(frameCount * frequency);
-    let y = amplitude * sin(angle);
-    rect(x, y, size, size);
+  display() {
+    fill(this.color);
+    noStroke();
+    ellipse(this.posX, this.posY, this.size);
   }
 }
